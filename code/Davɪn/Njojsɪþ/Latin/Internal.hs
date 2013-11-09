@@ -1,13 +1,10 @@
 {-# LANGUAGE FlexibleContexts #-}
-module Davɪn.Njojsɪþ.Latin
-    ( Latin
-    , toLatin
-    , fromLatin
-    ) where
-import Davɪn.Njojsɪþ.Latin.Internal
+
+module Davɪn.Njojsɪþ.Latin.Internal where
 
 import           Control.Lens
 import qualified Data.ByteString as B
+import qualified Data.ByteString.UTF8 as UTF8
 import           Data.Functor.Identity
 import           Data.List
 import qualified Data.Map as Map
@@ -79,7 +76,8 @@ nasalTable = Map.fromList
     ]
 
 showsLetter :: Letter -> ShowS
-showsLetter (LoneCon con) = (justLookup conTable con:)
+showsLetter (LoneCon (Left con)) = (justLookup conTable con:)
+showsLetter (LoneCon (Right spr)) = (justLookup sproutTable spr:)
 showsLetter (Syl syl) = stem . sprout . nasal . con
   where stem = (justLookup stemTable (syl^.sylStem):)
         sprout = case syl^.sylSprout of
@@ -97,8 +95,8 @@ showsLetter (Syl syl) = stem . sprout . nasal . con
                   else id
 showsLetter (Special ch) = (ch:)
 
-showNjojsɪþ :: Njojsɪþ -> String
-showNjojsɪþ = ($![]) . foldl' (.) id . map showsLetter
+showNjojsɪþ :: Njojsɪþ -> B.ByteString
+showNjojsɪþ = UTF8.fromString . ($![]) . foldl' (.) id . map showsLetter
 
 pLatin :: Stream s Identity Char => Parsec s () Njojsɪþ
 pLatin = many pLetter
@@ -107,7 +105,9 @@ pLetter :: Stream s Identity Char => Parsec s () Letter
 pLetter = pLoneCon <|> pSyllable <|> pSpecial
 
 pLoneCon :: Stream s Identity Char => Parsec s () Letter
-pLoneCon = fmap LoneCon $ pFromTable conTable
+pLoneCon = fmap LoneCon $ 
+    Left (pFromTable conTable)
+    <|> Right (pFromTable sproutTable)
 
 pSyllable :: Stream s Identity Char => Parsec s () Letter
 pSyllable = do
@@ -151,3 +151,4 @@ pFromTable table = try $ do
 
 pMaybe :: Stream s Identity Char => Parsec s () a -> Parsec s () (Maybe a)
 pMaybe p = fmap Just p <|> return Nothing
+

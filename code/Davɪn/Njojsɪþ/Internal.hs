@@ -1,29 +1,7 @@
 {-# LANGUAGE TemplateHaskell #-}
 {-# LANGUAGE PatternGuards #-}
 
-module Davɪn.Njojsɪþ
-    ( Root(..) 
-    , Consonant
-    , mkCon
-    , conRoot
-    , conVoiced
-    , conFricative
-    , Stem(..)
-    , Sprout(..)
-    , Syllable
-    , mkSyl
-    , sylCon
-    , sylStem
-    , sylSprout
-    , sylNasal
-    , Letter(..)
-    , loneCon
-    , loneSprout
-    , Njojsɪþ
-    , NjojsɪþEncoding
-    , toNjojsɪþ
-    , fromNjojsɪþ
-    ) where
+module Davɪn.Njojsɪþ.Internal where
 
 import Control.Lens
 import Data.List
