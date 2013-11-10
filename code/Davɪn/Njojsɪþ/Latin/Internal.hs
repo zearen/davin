@@ -95,8 +95,8 @@ showsLetter (Syl syl) = stem' . sprout' . nasal' . root'
                   else id
 showsLetter (Special ch) = (ch:)
 
-showNjojsɪþ :: Njojsɪþ -> B.ByteString
-showNjojsɪþ = UTF8.fromString . ($![]) . foldl' (.) id . map showsLetter
+showNjojsɪþ :: Njojsɪþ -> String
+showNjojsɪþ = ($![]) . foldl' (.) id . map showsLetter
 
 pLatin :: Stream s Identity Char => Parsec s () Njojsɪþ
 pLatin = many pLetter
@@ -133,7 +133,7 @@ instance NjojsɪþEncoding Latin where
     toNjojsɪþ latin = case parse pLatin "" $ fromLatin latin of
         Left err -> Left $ show err
         (Right njojsɪþ) -> Right njojsɪþ
-    fromNjojsɪþ = toLatin . showNjojsɪþ
+    fromNjojsɪþ = toLatin . UTF8.fromString . showNjojsɪþ
 
 justLookup :: Ord k => Map.Map k v -> k -> v
 justLookup = flip $ fromJust .: Map.lookup
