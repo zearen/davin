@@ -5,4 +5,4 @@ module Davɪn.Njojsɪþ.Bits
     (
     ) where
 
-import Davɪn.Njojsɪþ.Bits
+import Davɪn.Njojsɪþ.Bits.Internal

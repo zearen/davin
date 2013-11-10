@@ -76,22 +76,22 @@ nasalTable = Map.fromList
     ]
 
 showsLetter :: Letter -> ShowS
-showsLetter (LoneCon (Left con)) = (justLookup conTable con:)
+showsLetter (LoneCon (Left root')) = (justLookup conTable root':)
 showsLetter (LoneCon (Right spr)) = (justLookup sproutTable spr:)
-showsLetter (Syl syl) = stem . sprout . nasal . con
-  where stem = (justLookup stemTable (syl^.sylStem):)
-        sprout = case syl^.sylSprout of
+showsLetter (Syl syl) = stem' . sprout' . nasal' . root'
+  where stem' = (justLookup stemTable (syl^.sylStem):)
+        sprout' = case syl^.sylSprout of
             Nothing -> id
             Just s -> (justLookup sproutTable s:)
-        con = case syl^.sylCon of
+        root' = case syl^.sylRoot of
             Nothing -> id
-            Just con -> (justLookup conTable con:)
-        nasal = if syl^.sylNasal
+            Just root' -> (justLookup conTable root':)
+        nasal' = if syl^.sylNasal
                   then
-                    case syl^.sylCon of
+                    case syl^.sylRoot of
                         Nothing -> error $ "Davɪn.Njojsɪþ: Corrupt Syllable "
                             ++ "(nasalized lone vowel)"
-                        Just con -> (justLookup nasalTable (con^.conRoot):)
+                        Just root' -> (justLookup nasalTable (root'^.conRoot):)
                   else id
 showsLetter (Special ch) = (ch:)
 
@@ -106,24 +106,24 @@ pLetter = pLoneCon <|> pSyllable <|> pSpecial
 
 pLoneCon :: Stream s Identity Char => Parsec s () Letter
 pLoneCon = fmap LoneCon $ 
-    Left (pFromTable conTable)
-    <|> Right (pFromTable sproutTable)
+    fmap Left (pFromTable conTable)
+    <|> fmap Right (pFromTable sproutTable)
 
 pSyllable :: Stream s Identity Char => Parsec s () Letter
 pSyllable = do
-    stem <- pFromTable stemTable
-    sprout <- pMaybe $ pFromTable sproutTable
-    (con, nasal) <- pNasal <|> pCon
-    return $ Syl $ mkSyl con stem sprout nasal
+    stem_ <- pFromTable stemTable
+    sprout_ <- pMaybe $ pFromTable sproutTable
+    (root_, nasal_) <- pNasal <|> pCon
+    return $ Syl $ set sylNasal nasal_ $ mkSyl stem_ sprout_ root_
   where pNasal = try $ do
             ch <- oneOf "mnŋ"
-            con <- pFromTable conTable
-            if ch == justLookup nasalTable (con^.conRoot)
-              then return (Just con, True)
-              else fail "Found nasal, but didn't assimilate"
+            root' <- pFromTable conTable
+            if ch == justLookup nasalTable (root'^.conRoot)
+              then return (Just root', True)
+              else fail "Found nasal', but didn't assimilate"
         pCon = do
-            con <- pMaybe $ pFromTable conTable
-            return (con, False)
+            root' <- pMaybe $ pFromTable conTable
+            return (root', False)
     
 
 pSpecial :: Stream s Identity Char => Parsec s () Letter
