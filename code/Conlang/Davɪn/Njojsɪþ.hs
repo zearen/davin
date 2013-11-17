@@ -1,4 +1,4 @@
-module Davɪn.Njojsɪþ
+module Conlang.Davɪn.Njojsɪþ
     ( Root(..) 
     , Consonant
     , mkCon
@@ -18,12 +18,12 @@ module Davɪn.Njojsɪþ
     , sprout
     , nasal
     , Letter(..)
+    , LoneConClass
     , loneCon
-    , loneSprout
     , Njojsɪþ
     , NjojsɪþEncoding
     , toNjojsɪþ
     , fromNjojsɪþ
     ) where
 
-import Davɪn.Njojsɪþ.Internal
+import Conlang.Davɪn.Njojsɪþ.Internal

@@ -3,7 +3,7 @@ This module is meant to be imported qualified, and is hence supplied
 separately from "Davɪn.Njojsɪþ".  It contains all the primitive letters in
 shorthand.
 -}
-module Davɪn.Njojsɪþ.Letters
+module Conlang.Davɪn.Njojsɪþ.Letters
     ( p, b, f, v
     , t, d, s, z
     , þ, ð, ʃ, ʒ
@@ -13,7 +13,7 @@ module Davɪn.Njojsɪþ.Letters
     , y, ɪ, i, a, e, o, u
     ) where
 
-import Davɪn.Njojsɪþ
+import Conlang.Davɪn.Njojsɪþ
 
 fromRoot :: Root -> [Consonant]
 fromRoot root = zipWith (\r (v, f) -> mkCon r v f) (repeat root) 

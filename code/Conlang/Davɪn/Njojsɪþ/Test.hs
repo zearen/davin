@@ -1,7 +1,7 @@
-module Davɪn.Njojsɪþ.Test (tests) where
+module Conlang.Davɪn.Njojsɪþ.Test (tests) where
 
-import Davɪn.Njojsɪþ.Internal
-import Davɪn.Njojsɪþ.Letters
+import Conlang.Davɪn.Njojsɪþ.Internal
+import Conlang.Davɪn.Njojsɪþ.Letters
 
 import Test.HUnit
 
@@ -24,6 +24,34 @@ tests = test
       , compare ʃ ʃ ~?= EQ
       , compare ʒ þ ~?= GT
       , compare ŋ p ~?= GT
+      ]
+    , "Syllable" ~:
+      [ compare i' e' ~?= LT
+      , compare e' ej ~?= LT
+      , compare inz enz ~?= LT
+      , compare ed ed ~?= EQ
+      , compare inz inz ~?= EQ
+      , compare en end ~?= GT
+      , compare end ed ~?= GT
+      , compare ed ej ~?= GT
+      ]
+    , "Letter" ~:
+      [ compare (loneCon r) (loneCon j) ~?= LT
+      , compare (loneCon w) (loneCon ʒ) ~?= GT
+      , compare (loneCon d) (loneCon s) ~?= LT
+      , compare (loneCon h) (loneCon l) ~?= GT
+      , compare (loneCon x) (loneCon x) ~?= EQ
+      , compare (loneCon w) (loneCon w) ~?= EQ
+      , compare (loneCon g) (Syl ej) ~?= LT
+      , compare (Syl inz) (loneCon h) ~?= GT
+      , compare (Syl i') (Syl inz) ~?= LT
+      , compare (Syl enz) (Syl ed) ~?= GT
+      , compare (Syl ejd) (Syl ejd) ~?= EQ
+      , compare (Syl e') (Special '.') ~?= LT
+      , compare (Special ' ') (Syl en) ~?= GT
+      , compare (Special '1') (Special '4') ~?= LT
+      , compare (Special '2') (Special '1') ~?= GT
+      , compare (Special '!') (Special '!') ~?= EQ
       ]
     ]
   , "constructor" ~:

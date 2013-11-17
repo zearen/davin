@@ -1,7 +1,7 @@
 {-# LANGUAGE TemplateHaskell #-}
 {-# LANGUAGE PatternGuards #-}
 
-module Davɪn.Njojsɪþ.Internal where
+module Conlang.Davɪn.Njojsɪþ.Internal where
 
 import Control.Lens
 import Data.List
@@ -61,7 +61,7 @@ data Sprout
     | S_h            
   deriving (Show, Eq, Ord, Enum)
 
--- | Represents a Davɪn syllable, which must have at least a 'Stem'
+-- | Represents a Conlang.Davɪn.syllable, which must have at least a 'Stem'
 data Syllable = Syllable
     { _sylStem :: Stem
     , _sylSprout :: Maybe Sprout
@@ -103,10 +103,10 @@ sprout = set sylSprout . Just
 nasal :: Syllable -> Syllable
 nasal syl
     | syl^.sylRoot == Nothing =
-        error "Davɪn.Njojsɪþ.nasal: Cannot nasalize pure vowel"
+        error "Conlang.Davɪn.Njojsɪþ.nasal: Cannot nasalize pure vowel"
     | Just root' <- syl^.sylRoot
     , root'^.conRoot == C_r = 
-        error "Davɪn.Njojsɪþ.nasal: Cannot nasalize nasal consonant"
+        error "Conlang.Davɪn.Njojsɪþ.nasal: Cannot nasalize nasal consonant"
     | otherwise = set sylNasal True syl
 
 data Letter
@@ -115,22 +115,26 @@ data Letter
     | Special Char
   deriving (Show, Eq)
 
--- | A convenience function for creating 'Consonant' 'LoneCon's
-loneCon :: Consonant -> Letter
-loneCon = LoneCon . Left
+-- A convenience class and 
+class LoneConClass a where
+    loneCon :: a -> Letter
+instance LoneConClass Consonant where
+    loneCon = LoneCon . Left
 
--- | A convenience function for creating 'Sprout' 'LoneCon's
-loneSprout :: Sprout -> Letter
-loneSprout = LoneCon . Right
+instance LoneConClass Sprout where
+    loneCon = LoneCon . Right
 
 instance Ord Letter where
     compare (LoneCon eiCon1) (LoneCon eiCon2) = compareLoneCon eiCon1 eiCon2
       where compareLoneCon (Left con1) (Left con2) = compare con1 con2
             compareLoneCon (Left _) _ = LT
+            compareLoneCon _ (Left _) = GT
             compareLoneCon (Right spr1) (Right spr2) = compare spr1 spr2
     compare (LoneCon _) _ = LT
+    compare _ (LoneCon _) = GT
     compare (Syl syl1) (Syl syl2) = compare syl1 syl2
     compare (Syl _) _ = LT
+    compare _ (Syl _) = GT
     compare (Special char1) (Special char2) = compare char1 char2
 
 type Njojsɪþ = [Letter]

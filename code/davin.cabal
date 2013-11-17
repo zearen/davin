@@ -17,16 +17,16 @@ cabal-version:       >=1.8
 
 library
   exposed-modules: 
-    Davɪn.Njojsɪþ,
-    Davɪn.Njojsɪþ.Bits,
-    Davɪn.Njojsɪþ.Font,
-    Davɪn.Njojsɪþ.Latin,
-    Davɪn.Njojsɪþ.Letters
+    Conlang.Davɪn.Njojsɪþ,
+    Conlang.Davɪn.Njojsɪþ.Bits,
+    Conlang.Davɪn.Njojsɪþ.Font,
+    Conlang.Davɪn.Njojsɪþ.Latin,
+    Conlang.Davɪn.Njojsɪþ.Letters
   other-modules:
-    Davɪn.Njojsɪþ.Internal,
-    Davɪn.Njojsɪþ.Bits.Internal,
-    Davɪn.Njojsɪþ.Font.Internal,
-    Davɪn.Njojsɪþ.Latin.Internal,
+    Conlang.Davɪn.Njojsɪþ.Internal,
+    Conlang.Davɪn.Njojsɪþ.Bits.Internal,
+    Conlang.Davɪn.Njojsɪþ.Font.Internal,
+    Conlang.Davɪn.Njojsɪþ.Latin.Internal,
     Util
   build-depends:
     base >=3 && <5,
@@ -41,10 +41,10 @@ Test-Suite test-all
   type: exitcode-stdio-1.0
   main-is: test.hs
   other-modules:
-    Davɪn.Njojsɪþ.Test,
-    Davɪn.Njojsɪþ.Bits.Test,
-    Davɪn.Njojsɪþ.Font.Test,
-    Davɪn.Njojsɪþ.Latin.Test,
+    Conlang.Davɪn.Njojsɪþ.Test,
+    Conlang.Davɪn.Njojsɪþ.Bits.Test,
+    Conlang.Davɪn.Njojsɪþ.Font.Test,
+    Conlang.Davɪn.Njojsɪþ.Latin.Test,
     Test.Util
   build-depends:
     HUnit ==1.2.*,

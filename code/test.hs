@@ -6,16 +6,16 @@ import System.Exit (exitFailure)
 
 import Test.HUnit
 
-import qualified Davɪn.Njojsɪþ.Test
-import qualified Davɪn.Njojsɪþ.Latin.Test
+import qualified Conlang.Davɪn.Njojsɪþ.Test
+import qualified Conlang.Davɪn.Njojsɪþ.Latin.Test
 
 tests :: Test
 tests = test
   [ "Davin" ~: 
     [ "Njojsɪþ" ~: 
-      [ "Test" ~: Davɪn.Njojsɪþ.Test.tests
+      [ "Test" ~: Conlang.Davɪn.Njojsɪþ.Test.tests
       , "Latin" ~:
-        [ "Test" ~: Davɪn.Njojsɪþ.Latin.Test.tests
+        [ "Test" ~: Conlang.Davɪn.Njojsɪþ.Latin.Test.tests
         ]
       ]
     ]
