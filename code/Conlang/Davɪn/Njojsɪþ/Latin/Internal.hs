@@ -6,16 +6,16 @@ import           Control.Lens
 import qualified Data.ByteString as B
 import qualified Data.ByteString.UTF8 as UTF8
 import           Data.Functor.Identity
-import           Data.List
 import qualified Data.Map as Map
-import           Data.Maybe (fromJust)
 import           Text.Parsec
 
 import           Conlang.Davɪn.Njojsɪþ
 import qualified Conlang.Davɪn.Njojsɪþ.Letters as L
+import           Conlang.Davɪn.Njojsɪþ.Parsing
 import           Util
 
 newtype Latin = Latin B.ByteString
+    deriving (Eq, Ord, Show)
 
 toLatin :: B.ByteString -> Latin
 toLatin = Latin
@@ -27,7 +27,7 @@ instance NjojsɪþEncoding Latin where
     toNjojsɪþ latin = case parse pLatin "" $ fromLatin latin of
         Left err -> Left $ show err
         (Right njojsɪþ) -> Right njojsɪþ
-    fromNjojsɪþ = toLatin . UTF8.fromString . showNjojsɪþ
+    fromNjojsɪþ = toLatin . UTF8.fromString . showNjojsɪþ showsLetter
 
 showsLetter :: Letter -> ShowS
 showsLetter (LoneCon (Left root')) = (justLookup conTable root':)
@@ -50,8 +50,6 @@ showsLetter (Syl syl) = stem' . sprout' . nasal' . root'
                   else id
 showsLetter (Special ch) = (ch:)
 
-showNjojsɪþ :: Njojsɪþ -> String
-showNjojsɪþ = ($![]) . foldl' (.) id . map showsLetter
 
 pLatin :: Stream s Identity Char => Parsec s () Njojsɪþ
 pLatin = many pLetter
@@ -84,23 +82,6 @@ pSyllable = do
 
 pSpecial :: Stream s Identity Char => Parsec s () Letter
 pSpecial = fmap Special anyChar
-
-justLookup :: Ord k => Map.Map k v -> k -> v
-justLookup = flip $ fromJust .: Map.lookup
-
-invertMap :: (Ord k, Ord v) => Map.Map k v -> Map.Map v k
-invertMap = Map.fromList . map invertTuple . Map.toList
-  where invertTuple (a, b) = (b, a)
-
-pFromTable :: (Ord k, Stream s Identity Char) => Map.Map k Char -> Parsec s () k
-pFromTable table = try $ do
-    mbK <- flip fmap anyChar $ flip Map.lookup $ invertMap table
-    case mbK of
-        Nothing -> fail "Expected Just from parser"
-        Just k -> return k
-
-pMaybe :: Stream s Identity Char => Parsec s () a -> Parsec s () (Maybe a)
-pMaybe p = fmap Just p <|> return Nothing
 
 conTable :: Map.Map Consonant Char
 conTable = Map.fromList

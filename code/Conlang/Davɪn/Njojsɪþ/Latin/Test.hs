@@ -1,35 +1,52 @@
 module Conlang.Davɪn.Njojsɪþ.Latin.Test where
 
-import Conlang.Davɪn.Njojsɪþ.Latin.Internal
+import           Conlang.Davɪn.Njojsɪþ.Latin.Internal
 
-import Test.HUnit
+import qualified Data.ByteString.UTF8 as UTF8
+import           Test.HUnit
 
-import Conlang.Davɪn.Njojsɪþ
-import Conlang.Davɪn.Njojsɪþ.Letters
-import Test.Util
+import           Conlang.Davɪn.Njojsɪþ
+import           Conlang.Davɪn.Njojsɪþ.Letters
+import           Test.Util
+
+toLatin' = toLatin . UTF8.fromString
 
 tests :: Test
 tests = test
   [ "show" ~:
-    [ showNjojsɪþ [] ~?= ""
-    , showNjojsɪþ [loneCon l, Syl $ root t $ stem e, Special '!'] ~?= "let!"
+    [ fromNjojsɪþ [] ~?= 
+        toLatin' ""
+    , fromNjojsɪþ [loneCon l, Syl $ root t $ stem e, Special '!'] ~?= 
+        toLatin' "let!"
     , "LoneCon" ~:
-      [ showNjojsɪþ [loneCon ɣ] ~?= "ɣ"
-      , showNjojsɪþ [loneCon h] ~?= "h"
-      , showNjojsɪþ [loneCon n, loneCon j] ~?= "nj"
+      [ fromNjojsɪþ [loneCon ɣ] ~?= 
+          toLatin' "ɣ"
+      , fromNjojsɪþ [loneCon h] ~?= 
+          toLatin' "h"
+      , fromNjojsɪþ [loneCon n, loneCon j] ~?= 
+          toLatin' "nj"
       ]
     , "Syl" ~:
-      [ showNjojsɪþ [Syl $ stem e] ~?= "e"
-      , showNjojsɪþ [Syl $ sprout j $ stem o] ~?= "oj"
-      , showNjojsɪþ [Syl $ root ð $ stem y] ~?= "yð"
-      , showNjojsɪþ [Syl $ root f $ sprout w $ stem a] ~?= "awf"
-      , showNjojsɪþ [Syl $ nasal $ root b $ stem o] ~?= "omb"
-      , showNjojsɪþ [Syl $ nasal $ root x $ sprout j $ stem a] ~?= "ajŋx"
-      , showNjojsɪþ [Syl $ root ʒ $ stem ɪ, Syl $ stem i] ~?= "ɪʒi"
+      [ fromNjojsɪþ [Syl $ stem e] ~?= 
+          toLatin' "e"
+      , fromNjojsɪþ [Syl $ sprout j $ stem o] ~?= 
+          toLatin' "oj"
+      , fromNjojsɪþ [Syl $ root ð $ stem y] ~?= 
+          toLatin' "yð"
+      , fromNjojsɪþ [Syl $ root f $ sprout w $ stem a] ~?= 
+          toLatin' "awf"
+      , fromNjojsɪþ [Syl $ nasal $ root b $ stem o] ~?= 
+          toLatin' "omb"
+      , fromNjojsɪþ [Syl $ nasal $ root x $ sprout j $ stem a] ~?= 
+          toLatin' "ajŋx"
+      , fromNjojsɪþ [Syl $ root ʒ $ stem ɪ, Syl $ stem i] ~?= 
+          toLatin' "ɪʒi"
       ]
     , "Special" ~:
-      [ showNjojsɪþ [Special ' '] ~?= " "
-      , showNjojsɪþ [Special '1', Special ','] ~?= "1,"
+      [ fromNjojsɪþ [Special ' '] ~?=
+          toLatin' " "
+      , fromNjojsɪþ [Special '1', Special ','] ~?=
+          toLatin' "1,"
       ]
     ]
   , "parse" ~:
@@ -74,4 +91,3 @@ tests = test
       ]
     ]
   ]
-

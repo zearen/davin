@@ -1,5 +1,6 @@
-module Conlang.Davɪn.Njojsɪþ.Font.Internal where
+{-# LANGUAGE FlexibleContexts #-}
 
+module Conlang.Davɪn.Njojsɪþ.Font.Internal where
 
 import           Control.Lens
 import qualified Data.ByteString as B
@@ -10,6 +11,7 @@ import           Text.Parsec
 
 import           Conlang.Davɪn.Njojsɪþ
 import qualified Conlang.Davɪn.Njojsɪþ.Letters as L
+import           Conlang.Davɪn.Njojsɪþ.Parsing
 import           Util
 
 newtype Font = Font B.ByteString
@@ -19,3 +21,15 @@ toFont = Font
 
 fromFont :: Font -> B.ByteString
 fromFont (Font str) = str
+
+instance NjojsɪþEncoding Font where
+    toNjojsɪþ font = case parse pFont "" $ fromFont font of
+        Left err -> Left $ show err
+        (Right njojsɪþ) -> Right njojsɪþ
+    fromNjojsɪþ = toFont . UTF8.fromString . showNjojsɪþ showsLetter
+
+showsLetter :: Letter -> ShowS
+showsLetter = \_ -> id
+
+pFont :: Stream s Identity Char => Parsec s () Njojsɪþ
+pFont = fail "Not implemented"

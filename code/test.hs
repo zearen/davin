@@ -8,6 +8,7 @@ import Test.HUnit
 
 import qualified Conlang.Davɪn.Njojsɪþ.Test
 import qualified Conlang.Davɪn.Njojsɪþ.Latin.Test
+import qualified Conlang.Davɪn.Njojsɪþ.Parsing.Test
 
 tests :: Test
 tests = test
@@ -16,6 +17,9 @@ tests = test
       [ "Test" ~: Conlang.Davɪn.Njojsɪþ.Test.tests
       , "Latin" ~:
         [ "Test" ~: Conlang.Davɪn.Njojsɪþ.Latin.Test.tests
+        ]
+      , "Parsing" ~:
+        [ "Test" ~: Conlang.Davɪn.Njojsɪþ.Parsing.Test.tests
         ]
       ]
     ]

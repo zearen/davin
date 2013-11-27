@@ -10,5 +10,5 @@ import Test.Util
 
 tests :: Test
 tests = test
-    [ 
-    ]
+  [ 
+  ]

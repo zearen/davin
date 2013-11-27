@@ -18,15 +18,19 @@ cabal-version:       >=1.8
 library
   exposed-modules: 
     Conlang.Davɪn.Njojsɪþ,
+    Conlang.Davɪn.Njojsɪþ.ARPAbet,
     Conlang.Davɪn.Njojsɪþ.Bits,
     Conlang.Davɪn.Njojsɪþ.Font,
     Conlang.Davɪn.Njojsɪþ.Latin,
     Conlang.Davɪn.Njojsɪþ.Letters
   other-modules:
     Conlang.Davɪn.Njojsɪþ.Internal,
+    Conlang.Davɪn.Njojsɪþ.ARPAbet.Internal,
     Conlang.Davɪn.Njojsɪþ.Bits.Internal,
     Conlang.Davɪn.Njojsɪþ.Font.Internal,
     Conlang.Davɪn.Njojsɪþ.Latin.Internal,
+    Conlang.Davɪn.Njojsɪþ.Parsing,
+    Conlang.Davɪn.Njojsɪþ.Parsing.Internal,
     Util
   build-depends:
     base >=3 && <5,

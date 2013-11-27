@@ -7,6 +7,16 @@ import Test.HUnit
 
 import Test.Util (assertPreludeError)
 
+e' = stem e
+i' = stem i
+ej = sprout j $ stem e
+en = root n $ stem e
+ed = root d $ stem e
+ejd = root d $ sprout j $ stem e
+end = nasal $ root d $ stem e
+enz = nasal $ root z $ stem e
+inz = nasal $ root z $ stem i
+
 tests :: Test
 tests = test
   [ "ordering" ~:
@@ -114,13 +124,3 @@ tests = test
       ]
     ]
   ]
-
-e' = stem e
-i' = stem i
-ej = sprout j $ stem e
-en = root n $ stem e
-ed = root d $ stem e
-ejd = root d $ sprout j $ stem e
-end = nasal $ root d $ stem e
-enz = nasal $ root z $ stem e
-inz = nasal $ root z $ stem i
